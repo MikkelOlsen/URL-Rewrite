@@ -49,7 +49,26 @@ class Routing extends \PDO
 
     foreach(ROUTES as $routeIndex => $singleRoute) {
       if(strtolower($routingPath) === strtolower($singleRoute['path'])) {
-        var_dump($singleRoute);
+
+        $URLparams = array_slice($newPath, $x, count($newPath));
+        if(array_key_exists('params', $singleRoute) && sizeof($singleRoute['params']) > 0)
+        {
+            for($ParamCnt = 0; $ParamCnt < count($URLparams); $ParamCnt++)
+            {
+                if(isset($singleRoute['params'][$ParamCnt]))
+                {
+                    $params[$singleRoute['params'][$ParamCnt]] = $URLparams[$ParamCnt];
+                }
+                else
+                {
+                    $params[] = $URLparams[$ParamCnt];
+                }
+            }
+        }
+        else
+        {
+            $params = $URLparams;
+        }
       }
     }
    
