@@ -19,8 +19,6 @@ class Routing extends \PDO
     $newPath = explode('/', rtrim($requiredRoute, '/'));
 
     $newPath = array_splice($newPath, 1, count($newPath)-1);
-    $match = false;
-    $routeIndexes = NULL;
     $routePath = [];
 
     foreach(ROUTES as $routeIdx => $route) {
@@ -48,7 +46,7 @@ class Routing extends \PDO
     for($x = 0; $x < sizeof($counter); $x++) {
       $routingPath .= '/'.$counter[$x];
     }
-    
+
     foreach(ROUTES as $routeIndex => $singleRoute) {
       if(strtolower($routingPath) === strtolower($singleRoute['path'])) {
         var_dump($singleRoute);
