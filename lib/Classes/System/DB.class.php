@@ -18,13 +18,13 @@ class DB extends \PDO
 
     private function setQuery(string $sql)
     {
-        $this->query = $this->prepare($sql);
+        $this->query = $this->conn->prepare($sql);
     }
 
-    public function __construct(string $dbhost, string $dbuser, string $dbpass, array $options = [])
+    public function __construct()
     {
         try {
-            $this->conn = parent::__construct($dbhost, $dbuser, $dbpass, $options);
+            $this->conn = new PDO('mysql:host='._DB_HOST_.';dbname='._DB_NAME_.';charset=utf8',_DB_USER_,_DB_PASSWORD_);
         } catch (\PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
             die();

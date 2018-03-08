@@ -1,28 +1,36 @@
 <?php
-	define('_DB_HOST_', 'localhost');
-	define('_DB_NAME_', 'citycykler');
-	define('_DB_USER_', 'maweb');
-	define('_DB_PASSWORD_', 'mast3rdr4gon');
-	define('_DB_PREFIX_', '');
-	define('_MYSQL_ENGINE_', 'InnoDB');
+
+	ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL);
+	
+	define('__DEBUG__', false);
+	define('__ROOT__', __DIR__);
+	define('DS', DIRECTORY_SEPARATOR);
 	define('_CLASSES_', __DIR__.'/lib/Classes');
 	define('_CLASSDIR_', glob(_CLASSES_ . '/*' , GLOB_ONLYDIR));
 
-	function ClassLoader(string $className)
-			{
-							$className = str_replace('\\', '/', $className);
-							if(file_exists($className)){
-									require_once($className);
-							} else {
-									echo 'ERROR:'. $className;
-							}
-			}
-	foreach(_CLASSDIR_ as $direc)
+	session_start();
+
+	function ClassLoader(string $className) 
 	{
-			foreach(glob($direc.'/*'.'.php') as $file) {
-					ClassLoader($file);
-			}
+		$className = str_replace('\\', '/', $className);
+		if(file_exists($className)){
+			require_once($className);
+		} else {
+			echo 'ERROR:'. $className;
+		}
 	}
 
-	require_once './config.php';
-	$db = new DB('mysql:host='._DB_HOST_.';dbname='._DB_NAME_.';charset=utf8',_DB_USER_,_DB_PASSWORD_);
+	foreach(_CLASSDIR_ as $direc)
+	{
+		foreach(glob($direc.'/*.class.php') as $file) {
+			ClassLoader($file);
+		}
+	}
+
+	foreach(Config::LocateFiles(__ROOT__ . DS . 'config' . DS) as $configFile)
+    {
+        require_once $configFile;
+	}
+	
